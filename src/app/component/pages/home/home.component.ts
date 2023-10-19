@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
 import { Food } from 'src/app/model/Food';
 import { FoodService } from 'src/app/services/food.service';
 
@@ -10,20 +11,25 @@ import { FoodService } from 'src/app/services/food.service';
 })
 export class HomeComponent implements OnInit {
   foods:Food[] = [];
+
   constructor(private api:FoodService , activateRoute:ActivatedRoute ){
+    let foodObervavle:Observable<Food[]>
     activateRoute.params.subscribe((params)=>{
       if (params.searchItem) {
-        this.foods = this.api.getAllFoodBySearchItem(params.searchItem)
+        foodObervavle = this.api.getAllFoodBySearchItem(params.searchItem)
       }
       else{
-        this.foods = api.getAll();
+        foodObervavle = api.getAll();
+        foodObervavle.subscribe((ServerFoods)=>{
+          this.foods = ServerFoods;
+        })
       }
     })
     
   }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+   
   }
   
   

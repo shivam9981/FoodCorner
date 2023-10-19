@@ -14,7 +14,10 @@ export class PageDetailComponent implements OnInit {
   constructor(activateroute:ActivatedRoute , private api:FoodService , private cartService:CartService, private router:Router){
     activateroute.params.subscribe((params)=>{
       if (params.id) {
-        this.food = api.getFoodId(params.id);
+          api.getFoodId(params.id).subscribe((ServerFoods)=>{
+            this.food = ServerFoods;
+          })
+        // this.food = api.getFoodId(params.id);
       }
     })
   }
